@@ -29,6 +29,27 @@ public class FieldUtil {
     }
 
     /**
+     * 通过属性和目标实例给属性赋值
+     *
+     * @param target 当前目标实例
+     * @param field 当前属性
+     * @param value 值
+     * @return Object 当前属性值
+     */
+    public static void setFieldValue(Object target, Field field, Object value){
+        if (target == null || field == null) {
+            return;
+        }
+        field.setAccessible(true);
+        try {
+            field.set(target, value);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return;
+    }
+
+    /**
      * 判断当前属性是否为java内置类或复杂对象
      *
      * @param field

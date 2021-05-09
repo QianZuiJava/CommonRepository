@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hu.codetoname.dao.IGlobalDataDao">
+    <resultMap id="DescInfo" type="cn.hu.codetoname.po.DescInfo">
+        <result column="ATTR_CODE" property="descCode"/>
+        <result column="ATTR_TEXT" property="descName"/>
+    </resultMap>
+    <select id="getDescInfo" resultMap="DescInfo">
+        SELECT
+          ATTR_CODE,
+          ATTR_TEXT
+        FROM
+          hu_global_basedata_t
+        WHERE GROUP_NAME = #{groupName, jdbcType=VARCHAR}
+          AND ATTR_TYPE = #{attrType, jdbcType=VARCHAR}
+          AND ATTR_CODE = #{attrCode, jdbcType=VARCHAR}
+          AND `LANGUAGE` = #{language, jdbcType=VARCHAR}
+    </select>
+</mapper>

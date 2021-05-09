@@ -1,6 +1,5 @@
 package cn.hu.codetoname.model;
 
-import cn.hu.codetoname.model.ConvertInfo;
 import lombok.Data;
 
 import java.util.ArrayList;
