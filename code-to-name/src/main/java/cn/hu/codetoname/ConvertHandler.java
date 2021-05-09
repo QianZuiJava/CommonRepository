@@ -1,13 +1,17 @@
 package cn.hu.codetoname;
 
 import cn.hu.codetoname.annnotion.ConvertCodeToName;
+import cn.hu.codetoname.dao.IGlobalDataDao;
 import cn.hu.codetoname.model.ConvertContext;
 import cn.hu.codetoname.model.ConvertField;
 import cn.hu.codetoname.model.ConvertInfo;
 import cn.hu.codetoname.model.FieldType;
+import cn.hu.codetoname.po.DescInfo;
 import cn.hu.codetoname.testmodel.Student;
 import cn.hu.codetoname.testmodel.Teacher;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -23,6 +27,12 @@ import java.util.concurrent.ConcurrentMap;
 public class ConvertHandler implements IConvertHandler {
     // 本地内存统一管理收集到的类和对应的属性结果集
     private static final ConcurrentMap<Class, List<ConvertField>> convertFieldManager = new ConcurrentHashMap<>();
+
+    @Autowired
+    private BaseDataManager baseDataManager;
+
+    @Autowired
+    private IGlobalDataDao globalDataDao;
 
     public static void main(String[] args) {
         Student student = new Student("", "MAN", new Teacher("", "JAVA"));
@@ -151,7 +161,30 @@ public class ConvertHandler implements IConvertHandler {
 
     @Override
     public void assignment(ConvertContext convertContext) {
+        String language = convertContext.getLanguage();
+        List<ConvertInfo> convertInfoList = convertContext.getConvertInfoList();
+        if (CollectionUtils.isEmpty(convertInfoList)) return;
+        for (ConvertInfo convertInfo : convertInfoList) {
+            String label = convertInfo.getLabel();
+            String prefix = convertInfo.getCacheKey(); // 实际就是前缀 cn_hu*gender  groupName*attrType
+            String cacheKey = label + "*" +prefix + "*" + language;
+            String incrementData = baseDataManager.getIncrementData(cacheKey);
+            if (StringUtils.isEmpty(incrementData)) {
+                refreshIncrementData(label, prefix, language, convertInfo.getConvertCodeValue());
+                incrementData = baseDataManager.getIncrementData(cacheKey);
+            }
+            convertInfo.setConvertNameValue(incrementData);
+        }
+    }
 
+    private void refreshIncrementData(String label, String prefix, String language, String convertCodeValue) {
+        // TODO 待补充逻辑：通过label找到对应的数据查询类，此时默认为 IGlobalDataDao
+        if (StringUtils.isEmpty(prefix))return;
+        String[] split = prefix.split("\\*");
+        List<DescInfo> descInfo = globalDataDao.getDescInfo(split[0], split[1], convertCodeValue, language);
+        String descName = descInfo.stream().findFirst().orElse(new DescInfo()).getDescName();
+        if (StringUtils.isEmpty(descName)) return;
+        baseDataManager.putIncrementData(label + "*" + prefix + "*" + language, descName);
     }
 
     @Override
@@ -162,7 +195,7 @@ public class ConvertHandler implements IConvertHandler {
         if (target instanceof List) {
             List list = (List) target;
             for (Object object : list){
-                collect(object, convertContext);
+                writeBack(object, convertContext);
             }
             return;
         }

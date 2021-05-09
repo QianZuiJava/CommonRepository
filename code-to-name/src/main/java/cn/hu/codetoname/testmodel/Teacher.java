@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class Teacher {
     // 课程名称
-    @ConvertCodeToName(label = "BaseData", prefix = "Teacher", dependCode = "courseCode")
+    @ConvertCodeToName(label = "GlobalBaseData", prefix = "cn_hu*course", dependCode = "courseCode")
     private String courseName;
     // 课程编码
     private String courseCode;

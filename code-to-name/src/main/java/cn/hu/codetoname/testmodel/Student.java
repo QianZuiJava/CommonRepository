@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class Student {
 
-    @ConvertCodeToName(label = "BaseData", prefix = "Student", dependCode = "genderCode")
+    @ConvertCodeToName(label = "GlobalBaseData", prefix = "cn_hu*gender", dependCode = "genderCode")
     private String genderName;
     private String genderCode;
     private Teacher teacher;
