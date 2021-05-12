@@ -1,2 +1,3 @@
 # CommonRepository
-技巧方法记录
+---
+#技巧方法记录
