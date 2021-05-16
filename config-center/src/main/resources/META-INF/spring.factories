@@ -1,0 +1,5 @@
+#环境处理器自动加载
+org.springframework.boot.env.EnvironmentPostProcessor=cn.hu.processor.AutoConfigEnvironmentProcessor
+
+#自定义远端配置加载器
+cn.hu.configaware.IAutoConfigLoader=cn.hu.configaware.AutoConfigLoader

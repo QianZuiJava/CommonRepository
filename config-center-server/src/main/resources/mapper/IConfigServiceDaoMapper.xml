@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hu.dao.IConfigServiceDao">
+    <resultMap id="DescInfo" type="cn.hu.model.RemotePropertyInfo">
+        <result column="CONFIG_KEY" property="key"/>
+        <result column="CONFIG_VALUE" property="value"/>
+    </resultMap>
+    <select id="getConfigs" resultMap="DescInfo">
+        SELECT
+          CONFIG_KEY,
+          CONFIG_VALUE
+        FROM
+          hu_remote_config_t
+        WHERE 1 = 1
+    </select>
+</mapper>
