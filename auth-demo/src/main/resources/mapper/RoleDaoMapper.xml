@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hu.authdemo.server.dao.RoleDao">
+<!--新增角色-->
+    <insert id="addRole" parameterType="cn.hu.authdemo.server.request.RoleAddRequest">
+        insert into auth_role_t(role_code,role_name,usable,tenant_id,created_by,updated_by)
+        values
+        (
+          #{roleCode, jdbcType=VARCHAR},
+          #{roleName, jdbcType=VARCHAR},
+          1,
+          #{tenantId, jdbcType=BIGINT},
+          #{operatorId, jdbcType=VARCHAR},
+          #{operatorId, jdbcType=VARCHAR}
+        )
+    </insert>
+</mapper>
