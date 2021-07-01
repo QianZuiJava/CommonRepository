@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hu.authdemo.server.dao.UserRoleRelationDao">
+<!--新增角色-->
+    <insert id="bindUserAndRole" parameterType="cn.hu.authdemo.server.request.BindUserAndRole">
+        insert into auth_user_role_t(role_code,user_account,usable,tenant_id,created_by,updated_by)
+        values
+        (
+          #{roleCode, jdbcType=VARCHAR},
+          #{userAccount, jdbcType=VARCHAR},
+          1,
+          #{tenantId, jdbcType=BIGINT},
+          #{operatorId, jdbcType=VARCHAR},
+          #{operatorId, jdbcType=VARCHAR}
+        )
+    </insert>
+    <select id="selectCountByUserAndRole" resultType="java.lang.Integer">
+        select count(1)
+        from auth_user_role_t
+        where role_code = #{roleCode, jdbcType=VARCHAR}
+        and user_account = #{userAccount, jdbcType=VARCHAR}
+        and tenant_id = #{tenantId, jdbcType=BIGINT}
+    </select>
+</mapper>

@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.hu.authdemo.server.dao.RoleDao">
+<mapper namespace="cn.hu.authdemo.server.dao.UserDao">
 <!--新增角色-->
-    <insert id="addRole" parameterType="cn.hu.authdemo.server.request.RoleAddRequest">
-        insert into auth_role_t(role_code,role_name,usable,tenant_id,created_by,updated_by)
+    <insert id="addUser" parameterType="cn.hu.authdemo.server.request.UserAddRequest">
+        insert into auth_user_t(user_account,usable,tenant_id,created_by,updated_by)
         values
         (
-          #{roleCode, jdbcType=VARCHAR},
-          #{roleName, jdbcType=VARCHAR},
+          #{userAccount, jdbcType=VARCHAR},
           1,
           #{tenantId, jdbcType=BIGINT},
           #{operatorId, jdbcType=VARCHAR},
           #{operatorId, jdbcType=VARCHAR}
         )
     </insert>
-    <resultMap id="USER_ROLE" type="cn.hu.authdemo.server.model.UserRole">
+    <resultMap id="USER_INFO" type="cn.hu.authdemo.server.model.UserInfo">
         <result column="id" property="id" jdbcType="BIGINT"/>
-        <result column="role_code" property="roleCode" jdbcType="VARCHAR"/>
-        <result column="role_name" property="roleName" jdbcType="VARCHAR"/>
+        <result column="user_account" property="userAccount" jdbcType="VARCHAR"/>
         <result column="usable" property="usable" jdbcType="INTEGER"/>
         <result column="tenant_id" property="tenantId" jdbcType="BIGINT"/>
         <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
@@ -25,20 +23,18 @@
         <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
         <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP"/>
     </resultMap>
-    <select id="selectByRoleCode" resultMap="USER_ROLE">
+    <select id="selectByAccountAndTenant" resultMap="USER_INFO">
         select
           id,
-          role_code,
-          role_name,
+          user_account,
           usable,
           tenant_id,
           created_by,
           created_time,
           updated_by,
           updated_time
-        from
-        auth_role_t
-        where role_code = #{roleCode, jdbcType=VARCHAR}
+        from auth_user_t
+        where user_account = #{userAccount, jdbcType=VARCHAR}
         and tenant_id = #{tenantId, jdbcType=BIGINT}
     </select>
 </mapper>

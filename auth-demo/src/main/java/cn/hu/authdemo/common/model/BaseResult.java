@@ -1,5 +1,7 @@
 package cn.hu.authdemo.common.model;
 
+import cn.hu.authdemo.common.exception.BusinessException;
+
 public class BaseResult {
     private String resCode;
     private String resMessage;
@@ -16,6 +18,10 @@ public class BaseResult {
 
     public static BaseResult ok() {
         return new BaseResult(ResultCode.SUCCESS.getCode(),ResultCode.SUCCESS.getMsg(), null);
+    }
+
+    public static BaseResult businessException(BusinessException e) {
+        return new BaseResult(e.getCode(), e.getMsg(), null);
     }
 
     public String getResCode() {
